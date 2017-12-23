@@ -736,6 +736,7 @@ function compose() {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["fetchPosts"] = fetchPosts;
+/* harmony export (immutable) */ __webpack_exports__["fetchPostsIfNeeded"] = fetchPostsIfNeeded;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_cross_fetch__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_cross_fetch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_cross_fetch__);
 
@@ -802,6 +803,27 @@ function fetchPosts(subreddit){
             .then(
                 json => dispatch(receivePosts(subreddit, json))
             )
+    }
+}
+
+function shouldFetchPosts(state, subreddit) {
+    const posts = state.postsBySubreddit[subreddit]
+    if (!posts) {
+        return true
+    } else if (posts.isFetching) {
+        return false
+    } else {
+        return posts.didInvalidate
+    }
+}
+
+function fetchPostsIfNeeded(subreddit) {
+    return (dispatch, getState) => {
+        if (shouldFetchPosts(getState(), subreddit)) {
+            return dispatch(fetchPosts(subreddit))
+        } else {
+            return Promise.resolve()
+        }
     }
 }
 
