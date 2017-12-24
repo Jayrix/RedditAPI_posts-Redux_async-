@@ -1,6 +1,6 @@
 import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
-import { selectSubreddit, fetchPosts } from './actions/actions'
+import {selectSubreddit, fetchPostsIfNeeded} from './actions/actions'
 import rootReducer from './reducers/reducers'
 import { createLogger } from 'redux-logger'
 
@@ -17,5 +17,5 @@ const store = createStore(
 
 store.dispatch(selectSubreddit('reactjs'))
 store
-    .dispatch(fetchPosts('reactjs'))
+    .dispatch(fetchPostsIfNeeded('reactjs'))
     .then(() => console.log(store.getState()))

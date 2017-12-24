@@ -817,15 +817,16 @@ function shouldFetchPosts(state, subreddit) {
     }
 }
 
-function fetchPostsIfNeeded(subreddit) {
-    return (dispatch, getState) => {
-        if (shouldFetchPosts(getState(), subreddit)) {
+function fetchPostsIfNeeded(subreddit){
+    return function (dispatch, getState) {
+        if (shouldFetchPosts(getState(),subreddit)){
             return dispatch(fetchPosts(subreddit))
         } else {
             return Promise.resolve()
         }
     }
 }
+
 
 
 
@@ -860,7 +861,7 @@ var store = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddlewa
 ));
 
 store.dispatch((0, _actions.selectSubreddit)('reactjs'));
-store.dispatch((0, _actions.fetchPosts)('reactjs')).then(function () {
+store.dispatch((0, _actions.fetchPostsIfNeeded)('reactjs')).then(function () {
     return console.log(store.getState());
 });
 
